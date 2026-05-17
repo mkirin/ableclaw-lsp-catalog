@@ -16,7 +16,7 @@
  * No npm deps — uses Node 20 built-ins (fetch, fs/promises). Exits non-zero
  * on any network/parse error so CI fails loud.
  */
-import { writeFile } from "node:fs/promises";
+import { readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -144,16 +144,45 @@ async function resolveSpringBootLs() {
 
 // ── Main ───────────────────────────────────────────────────────────────────
 
+/** Compare two component arrays for material equality — ignores transient
+ *  fields like publishedAt/released so we don't open spurious PRs daily. */
+function componentsMaterial(c) {
+  return JSON.stringify(c.map((x) => ({
+    id: x.id, name: x.name, version: x.version,
+    sizeBytes: x.sizeBytes, downloadUrl: x.downloadUrl, sha256: x.sha256,
+    unpack: x.unpack, launcher: x.launcher,
+  })));
+}
+
+async function readExisting() {
+  try {
+    const raw = await readFile(OUT_PATH, "utf-8");
+    return JSON.parse(raw);
+  } catch { return null; }
+}
+
 async function main() {
   const [jdt, spring] = await Promise.all([resolveJdtLs(), resolveSpringBootLs()]);
+  const existing = await readExisting();
 
-  const totalSize = jdt.sizeBytes + spring.sizeBytes;
-  const today = new Date().toISOString().slice(0, 10);
+  const newComponents = [jdt, spring];
+  const unchanged = existing
+    && existing.extensions?.[0]?.components
+    && componentsMaterial(existing.extensions[0].components) === componentsMaterial(newComponents);
+
+  // Preserve transient fields when nothing material changed — avoids a daily
+  // PR over a 1-line timestamp diff.
+  const publishedAt = unchanged
+    ? existing.publishedAt
+    : new Date().toISOString();
+  const released = unchanged
+    ? existing.extensions[0].released
+    : new Date().toISOString().slice(0, 10);
 
   const catalog = {
     schemaVersion: 1,
     source: CATALOG_SOURCE,
-    publishedAt: new Date().toISOString(),
+    publishedAt,
     extensions: [
       {
         id: "java-spring",
@@ -165,18 +194,18 @@ async function main() {
         tags: ["Java", "Spring Boot", "Maven", "Gradle", ".properties · .yml"],
         fileTypes: [".java", "application.properties", "application.yml", "pom.xml", "build.gradle"],
         languages: ["java", "spring-boot-properties", "spring-boot-properties-yaml"],
-        sizeBytes: totalSize,
-        released: today,
+        sizeBytes: jdt.sizeBytes + spring.sizeBytes,
+        released,
         changelogUrl: "https://github.com/eclipse-jdtls/eclipse.jdt.ls/releases",
         requirements: { java: { min: "17" } },
-        components: [jdt, spring],
+        components: newComponents,
       },
     ],
   };
 
   const json = JSON.stringify(catalog, null, 2) + "\n";
   await writeFile(OUT_PATH, json, "utf-8");
-  process.stderr.write(`✓ Wrote ${OUT_PATH}\n`);
+  process.stderr.write(`✓ Wrote ${OUT_PATH}${unchanged ? " (unchanged)" : " (UPDATED)"}\n`);
   process.stderr.write(`  jdt.ls         ${jdt.version}  ${(jdt.sizeBytes / 1024 / 1024).toFixed(1)} MB  ${jdt.sha256.slice(0, 12)}…\n`);
   process.stderr.write(`  spring-boot-ls ${spring.version}  ${(spring.sizeBytes / 1024 / 1024).toFixed(1)} MB  ${spring.sha256.slice(0, 12)}…\n`);
 }
