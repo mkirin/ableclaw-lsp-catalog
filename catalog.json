@@ -1,0 +1,90 @@
+{
+  "schemaVersion": 1,
+  "source": "https://github.com/mkirin/ableclaw-lsp-catalog",
+  "publishedAt": "2026-05-17T07:54:00.967Z",
+  "extensions": [
+    {
+      "id": "java-spring",
+      "name": "Java + Spring Boot",
+      "publisher": "eclipse · spring-projects",
+      "version": "0.43.0",
+      "description": "Eclipse JDT Language Server with Spring Boot language extension. Adds IntelliSense, Go-to-Definition, refactoring, diagnostics, and Spring-specific features (application.yml autocomplete, @RequestMapping hints, bean references) for .java, application.properties, application.yml, pom.xml, and build.gradle.",
+      "tags": [
+        "Java",
+        "Spring Boot",
+        "Maven",
+        "Gradle",
+        ".properties · .yml"
+      ],
+      "fileTypes": [
+        ".java",
+        "application.properties",
+        "application.yml",
+        "pom.xml",
+        "build.gradle"
+      ],
+      "languages": [
+        "java",
+        "spring-boot-properties",
+        "spring-boot-properties-yaml"
+      ],
+      "sizeBytes": 134143496,
+      "released": "2026-05-17",
+      "changelogUrl": "https://github.com/eclipse-jdtls/eclipse.jdt.ls/releases",
+      "requirements": {
+        "java": {
+          "min": "17"
+        }
+      },
+      "components": [
+        {
+          "id": "jdt.ls",
+          "name": "eclipse.jdt.ls",
+          "version": "1.59.0-202605111959",
+          "sizeBytes": 51543088,
+          "downloadUrl": "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-1.59.0-202605111959.tar.gz",
+          "sha256": "b424b81e8d98eb57d0a93a98ed2b0f27ce6fee6b10ef26195b96b59eaf0405d8",
+          "unpack": "tar.gz",
+          "launcher": {
+            "command": "${java}",
+            "args": [
+              "-Declipse.application=org.eclipse.jdt.ls.core.id1",
+              "-Dosgi.bundles.defaultStartLevel=4",
+              "-Declipse.product=org.eclipse.jdt.ls.core.product",
+              "-Dlog.level=ALL",
+              "-Xmx1G",
+              "--add-modules=ALL-SYSTEM",
+              "--add-opens",
+              "java.base/java.util=ALL-UNNAMED",
+              "--add-opens",
+              "java.base/java.lang=ALL-UNNAMED",
+              "-jar",
+              "${componentDir}/plugins/org.eclipse.equinox.launcher_*.jar",
+              "-configuration",
+              "${componentDir}/config_${platform}",
+              "-data",
+              "${dataDir}/jdt.ls"
+            ]
+          }
+        },
+        {
+          "id": "spring-boot-ls",
+          "name": "spring-boot-language-server (vsix)",
+          "version": "2.1.2-RC1",
+          "sizeBytes": 82600408,
+          "downloadUrl": "https://github.com/spring-projects/spring-tools/releases/download/vscode-spring-boot-2.1.2-RC1/vscode-spring-boot-2.1.2-RC1.vsix",
+          "sha256": "ce430345704d1114d510f433d769ceb6c15f06337093aca761cfe0cbd88cc478",
+          "unpack": "zip",
+          "launcher": {
+            "command": "${java}",
+            "args": [
+              "-Xmx768M",
+              "-jar",
+              "${componentDir}/extension/jars/spring-boot-language-server-*.jar"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
