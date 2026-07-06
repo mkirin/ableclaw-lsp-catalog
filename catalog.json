@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "source": "https://github.com/mkirin/ableclaw-lsp-catalog",
-  "publishedAt": "2026-05-17T07:54:00.967Z",
+  "publishedAt": "2026-07-06T06:19:23.158Z",
   "extensions": [
     {
       "id": "java-spring",
@@ -28,8 +28,8 @@
         "spring-boot-properties",
         "spring-boot-properties-yaml"
       ],
-      "sizeBytes": 134143496,
-      "released": "2026-05-17",
+      "sizeBytes": 133687232,
+      "released": "2026-07-06",
       "changelogUrl": "https://github.com/eclipse-jdtls/eclipse.jdt.ls/releases",
       "requirements": {
         "java": {
@@ -40,10 +40,10 @@
         {
           "id": "jdt.ls",
           "name": "eclipse.jdt.ls",
-          "version": "1.59.0-202605111959",
-          "sizeBytes": 51543088,
-          "downloadUrl": "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-1.59.0-202605111959.tar.gz",
-          "sha256": "b424b81e8d98eb57d0a93a98ed2b0f27ce6fee6b10ef26195b96b59eaf0405d8",
+          "version": "1.61.0-202606300051",
+          "sizeBytes": 50928089,
+          "downloadUrl": "https://download.eclipse.org/jdtls/snapshots/jdt-language-server-1.61.0-202606300051.tar.gz",
+          "sha256": "c6ab0da4ef32e452e50c4a32fd0c5c54783941990434cb12e60a887cc73d1aa5",
           "unpack": "tar.gz",
           "launcher": {
             "command": "${java}",
@@ -70,10 +70,10 @@
         {
           "id": "spring-boot-ls",
           "name": "spring-boot-language-server (vsix)",
-          "version": "2.1.2-RC1",
-          "sizeBytes": 82600408,
-          "downloadUrl": "https://github.com/spring-projects/spring-tools/releases/download/vscode-spring-boot-2.1.2-RC1/vscode-spring-boot-2.1.2-RC1.vsix",
-          "sha256": "ce430345704d1114d510f433d769ceb6c15f06337093aca761cfe0cbd88cc478",
+          "version": "5.2.0.RELEASE",
+          "sizeBytes": 82759143,
+          "downloadUrl": "https://github.com/spring-projects/spring-tools/releases/download/5.2.0.RELEASE/vscode-spring-boot-2.2.0-RC1.vsix",
+          "sha256": "70943c4e434d469090f8cee54dacf1de10ec1161f92685581dc2ef6164971bb3",
           "unpack": "zip",
           "launcher": {
             "command": "${java}",
